@@ -38,6 +38,8 @@ k_CO2_PM = 1e6
 k_MCT_CAP = 6e8
 k_CO2_CAP = 5e6
 
+R_V = 1
+
 Km_sAC = 11
 Km_PDE3B = 0.4
 Km_PDE4 = 4.4
@@ -45,7 +47,7 @@ Km_PDE4 = 4.4
 # mean_V = lambda G: -27.1 + 103.91*g_K_RAT(RAT(G))-410.21*g_K_RAT(RAT(G))**2
 mean_V = lambda G: -30.2 + 34.7*g_K_RAT(RAT(G)) - 177.9*g_K_RAT(RAT(G))**2
 
-#Mitochondrial dysfunction
+# Mitochondrial dysfunction
 k_md = 0
 k_ATPase_r = 0.7
 
@@ -118,8 +120,8 @@ J_MCT_CAP = lambda G: k_MCT_CAP*(H_out(G)-H_bas)
 def F1(G, x):
     HCO3_in, H_in, CO2_in = x
     return [
-        J_lac(G) - J_MCT_PM(G, H_in) - J_NBC_PM(G, HCO3_in),
-        J_lac(G) + J_CO2(G) - J_MCT_PM(G, H_in) - J_CO2_PM(G, CO2_in),
+        J_lac(G) - R_V*J_MCT_PM(G, H_in) - 1/R_V*J_NBC_PM(G, HCO3_in),
+        J_lac(G) + J_CO2(G) - R_V*J_MCT_PM(G, H_in) - R_V*J_CO2_PM(G, CO2_in),
         H_in*HCO3_in/CO2_in - Ka
     ]
 
