@@ -30,7 +30,7 @@ except OSError:
         gkatp = alpha.g_K_RAT(alpha.RAT(g))
 
         # Calculating fcAMP from metabolic model (signaling part)
-        fcAMP = alpha.fcAMP(g, 1.2, 0.8, 0.2)
+        fcAMP = alpha.fcAMP(g)
 
         # Calculating secretion parameters from the voltage model
         voltage, currents = montefusco_euler(x_0, gkatp, g_L(gkatp), fcAMP,
