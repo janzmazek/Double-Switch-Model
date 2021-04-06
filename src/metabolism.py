@@ -99,7 +99,7 @@ J_lac = lambda G: p_L*J_pyr(G)
 
 J_H_PM = lambda k_H, H_in: k_H*(H_in-H_bas)
 J_CO2_PM = lambda k_CO2, CO2_in: k_CO2*(CO2_in-CO2_bas)
-J_HCO3_PM = lambda k_HCO3, HCO3_in: k_HCO3*(HCO3_in-HCO3_bas)
+J_HCO3_PM = lambda k_HCO3, HCO3_in: k_HCO3*(HCO3_bas-HCO3_in)
 
 def equations(G, const, p):
     HCO3_in, H_in, CO2_in, J_IC = p
@@ -107,7 +107,7 @@ def equations(G, const, p):
     return [
         J_lac(G) - J_H_PM(k_H, H_in) - J_IC,
         J_CO2(G) - J_CO2_PM(k_CO2, CO2_in) + J_IC,
-        -J_IC - J_HCO3_PM(k_HCO3, HCO3_in),
+        J_HCO3_PM(k_HCO3, HCO3_in) - J_IC,
         10**(-pKa) - H_in*HCO3_in/CO2_in
     ]
 
