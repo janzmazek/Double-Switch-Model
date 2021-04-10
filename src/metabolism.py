@@ -39,7 +39,7 @@ Km_sAC = 11
 Km_PDE3B = 0.4
 Km_PDE4 = 4.4
 
-r_sAC = 1.2
+r_sAC = 1.0
 r_PDE3B = 0.5
 r_PDE4 = 0.5
 
