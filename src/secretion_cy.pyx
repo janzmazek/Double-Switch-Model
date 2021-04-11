@@ -2,16 +2,8 @@ import numpy as np
 from libc.math cimport exp
 import cython
 
-cdef double CALCIUM = 0.05
-# cdef double CALCIUM = 0.15
-cdef double EXOCYTOSIS_L = 0.60
-# cdef double EXOCYTOSIS_L = 0.50
-cdef double EXOCYTOSIS_PQ = 0.60
-# cdef double EXOCYTOSIS_PQ = 0.50
-
-# cdef double CALCIUM = 0
-# cdef double EXOCYTOSIS_L = 0
-# cdef double EXOCYTOSIS_PQ = 0
+cdef double DIRECT = 0.6
+cdef double INDIRECT = 0.05
 
 
 # ---------------------------- Boltzmann function -----------------------------
@@ -179,10 +171,10 @@ cdef double f_H(double x, double K, double n):
     return x**n/(x**n + K**n)
 
 cdef double GS_PQ(double V, double m_CaPQ, double h_CaPQ, double CaM, double f_cAMP):
-    return (1-EXOCYTOSIS_PQ+EXOCYTOSIS_PQ*f_cAMP)*(m_CaPQ*h_CaPQ*f_H(CaPQ_0(V, CaM), K_PQ, n_PQ) + (1-m_CaPQ*h_CaPQ)*f_H(CaM, K_PQ, n_PQ))
+    return (1-DIRECT+DIRECT*f_cAMP)*(m_CaPQ*h_CaPQ*f_H(CaPQ_0(V, CaM), K_PQ, n_PQ) + (1-m_CaPQ*h_CaPQ)*f_H(CaM, K_PQ, n_PQ))
 
 cdef double GS_L(double V, double m_CaL, double h_CaL, double CaM, double f_cAMP):
-    return (1-EXOCYTOSIS_L+EXOCYTOSIS_L*f_cAMP)*(m_CaL**2*h_CaL*f_H(CaL_0(V, CaM), K_L, n_L) + (1-m_CaL**2*h_CaL)*f_H(CaM, K_L, n_L))
+    return (1-DIRECT+DIRECT*f_cAMP)*(m_CaL**2*h_CaL*f_H(CaL_0(V, CaM), K_L, n_L) + (1-m_CaL**2*h_CaL)*f_H(CaM, K_L, n_L))
 
 cdef double GS_m(double CaM):
     return f_H(CaM, K_m, n_m)
@@ -201,7 +193,7 @@ cdef double dV_dt(double V, double m_CaL, double h_CaL, double m_CaPQ, double h_
     cdef double KATP = I_KATP(V, g_KATP)
     cdef double L = I_L(V, g_L)
     cdef double SOC = I_SOC(V)
-    return -((1-CALCIUM+CALCIUM*f_cAMP)*(CaL+CaPQ+CaT)+Na+K+KA+KATP+L+SOC)/5
+    return -((1-INDIRECT+INDIRECT*f_cAMP)*(CaL+CaPQ+CaT)+Na+K+KA+KATP+L+SOC)/5
 
 cdef double dm_CaL_dt(double V, double m_CaL):
     return (m_CaL_inf(V)-m_CaL)/tau_m_CaL(V)
